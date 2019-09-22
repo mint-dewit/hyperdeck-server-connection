@@ -85,7 +85,7 @@
     "typescript": "^3.3.3333"
   },
   "resolutions": {
-    "typedoc/marked": "^0.6.2"
+    "typedoc/marked": "^0.7.0"
   },
   "keywords": [
     "blackmagic",

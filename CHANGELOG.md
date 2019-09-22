@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.2"></a>
+## 0.0.2 (2019-09-22)
+
+
+### Bug Fixes
+
+* add index file ([07fe18a](https://github.com/baltedewit/hyperdeck-server-connection/commit/07fe18a))
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/nrkno/tv-automation-hyperdeck-connection/compare/0.1.3...0.1.4) (2019-03-04)
 

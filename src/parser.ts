@@ -66,7 +66,7 @@ export class MultilineParser {
 			let param = bits.shift()!
 			for (let i = 0; i < bits.length - 1; i++) {
 				const bobs = bits[i].split(' ')
-			
+
 				let nextParam = ''
 				for (let i = bobs.length - 1; i >= 0; i--) {
 					nextParam = (bobs.pop() + ' ' + nextParam).trim()
@@ -74,9 +74,9 @@ export class MultilineParser {
 						break
 					}
 				}
-			
+
 				if (!bobs.length) throw new Error('Command malformed / paramName not recognised')
-			
+
 				params[param] = bobs.join(' ')
 				param = nextParam
 			}
@@ -94,21 +94,21 @@ export class MultilineParser {
 				if (this._debug) this._log('failed to parse header', lines[0])
 				return null
 			}
-	
+
 			const msg = headerMatch[1]
-	
+
 			const params: IHash<string> = {}
-	
+
 			for (let i = 1; i < lines.length; i++) {
 				const lineMatch = lines[i].match(/^(.*?): (.*)$/im)
 				if (!lineMatch) {
 					if (this._debug) this._log('failed to parse line', lines[i])
 					continue
 				}
-	
+
 				params[lineMatch[1]] = lineMatch[2]
 			}
-	
+
 			const res: IDeserializedCommand = {
 				raw: lines.join('\r\n'),
 				name: msg,

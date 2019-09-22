@@ -202,7 +202,7 @@ export enum AsynchronousCode {
 	SlotInfo = 502,
 	TransportInfo = 508,
 	RemoteInfo = 510,
-	ConfigurationInfo = 511,
+	ConfigurationInfo = 511
 }
 
 export enum NotifyType {

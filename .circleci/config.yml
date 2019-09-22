@@ -108,13 +108,13 @@ workflows:
       - Check for vulnerabilities:
           requires:
             - Checkout Code
-      - Test node-8:
-          requires:
-            - Checkout Code
+      # - Test node-8:
+      #     requires:
+      #       - Checkout Code
       - Send Coverage:
           requires:
             - Check for vulnerabilities
-            - Test node-8
+            # - Test node-8
           filters:
             branches:
               only:

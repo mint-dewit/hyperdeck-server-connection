@@ -58,3 +58,8 @@ This module will run tests by jest. (TBD)
 ```sh
 $ yarn unit
 ```
+## Acknowledgements
+
+* Inspired by [CasparCG Hyperdeck](https://github.com/peschuster/casparcg-hyperdeck) from [peschuster](https://github.com/peschuster)
+* Parser and some constants are derived from [hyperdeck-connection](https://github.com/nrkno/tv-automation-hyperdeck-connection)
+* The public callback-promise API was inspired by [mos-connection](https://github.com/nrkno/tv-automation-mos-connection)

@@ -1,17 +1,17 @@
-import { IDeserializedCommand, IHash, ParameterMap } from './types'
+import { DeserializedCommand, Hash, ParameterMap } from './types'
 
 export class MultilineParser {
 	private _debug: boolean
-	private _log: (...args: any[]) => void
+	private _log: (...args: unknown[]) => void
 	private _linesQueue: string[] = []
 
-	constructor (debug: boolean, log: (...args: any[]) => void) {
+	constructor(debug: boolean, log: (...args: unknown[]) => void) {
 		this._debug = debug
 		this._log = log
 	}
 
-	receivedString (data: string): IDeserializedCommand[] {
-		const res: IDeserializedCommand[] = []
+	receivedString(data: string): DeserializedCommand[] {
+		const res: DeserializedCommand[] = []
 
 		// add new lines to processing queue
 		const newLines = data.split('\r\n')
@@ -29,8 +29,10 @@ export class MultilineParser {
 			}
 
 			// if the first line has no colon, then it is a single line command
-			if (this._linesQueue[0].indexOf(':') === -1 ||
-			(this._linesQueue.length === 1 && this._linesQueue[0].indexOf(':') > 0)) {
+			if (
+				this._linesQueue[0].indexOf(':') === -1 ||
+				(this._linesQueue.length === 1 && this._linesQueue[0].indexOf(':') > 0)
+			) {
 				const r = this.parseResponse(this._linesQueue.splice(0, 1))
 				if (r) {
 					res.push(r)
@@ -52,8 +54,8 @@ export class MultilineParser {
 		return res
 	}
 
-	parseResponse (lines: string[]): IDeserializedCommand | null {
-		lines = lines.map(l => l.trim())
+	parseResponse(lines: string[]): DeserializedCommand | null {
+		lines = lines.map((l) => l.trim())
 
 		if (lines.length === 1 && lines[0].indexOf(':') > -1) {
 			const bits = lines[0].split(': ')
@@ -61,9 +63,10 @@ export class MultilineParser {
 			const msg = bits.shift() as keyof typeof ParameterMap
 			if (!msg) throw new Error('Unrecognised command')
 
-			const params: IHash<string> = {}
+			const params: Hash<string> = {}
 			const paramNames = new Set(ParameterMap[msg])
-			let param = bits.shift()!
+			let param = bits.shift()
+			if (!param) throw new Error('No named parameters found')
 			for (let i = 0; i < bits.length - 1; i++) {
 				const bobs = bits[i].split(' ')
 
@@ -88,7 +91,6 @@ export class MultilineParser {
 				parameters: params
 			}
 		} else {
-
 			const headerMatch = lines[0].match(/(.+?)(:|)$/im)
 			if (!headerMatch) {
 				if (this._debug) this._log('failed to parse header', lines[0])
@@ -97,7 +99,7 @@ export class MultilineParser {
 
 			const msg = headerMatch[1]
 
-			const params: IHash<string> = {}
+			const params: Hash<string> = {}
 
 			for (let i = 1; i < lines.length; i++) {
 				const lineMatch = lines[i].match(/^(.*?): (.*)$/im)
@@ -109,7 +111,7 @@ export class MultilineParser {
 				params[lineMatch[1]] = lineMatch[2]
 			}
 
-			const res: IDeserializedCommand = {
+			const res: DeserializedCommand = {
 				raw: lines.join('\r\n'),
 				name: msg,
 				parameters: params

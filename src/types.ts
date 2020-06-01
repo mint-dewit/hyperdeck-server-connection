@@ -1,12 +1,16 @@
 import * as util from 'util'
 
+import * as DeserializedCommands from './types/DeserializedCommands'
+import * as ResponseInterface from './types/ResponseInterface'
+export { DeserializedCommands, ResponseInterface }
+
 export const CRLF = '\r\n'
 
-export interface IHash<T> {
+export interface Hash<T> {
 	[key: string]: T
 }
 
-export interface INotififcationConfig {
+export interface NotififcationConfig {
 	transport: boolean
 	remote: boolean
 	slot: boolean
@@ -16,21 +20,21 @@ export interface INotififcationConfig {
 export class TResponse {
 	public code: ResponseCode
 	public name: string
-	public params: IHash<string>
+	public params: Hash<string>
 
-	constructor (code: ResponseCode, name: string, params?: IHash<string>) {
+	constructor(code: ResponseCode, name: string, params?: Hash<string>) {
 		this.code = code
 		this.name = name
 		if (params) this.params = params
 	}
 
-	public build (): string {
+	public build(): string {
 		let data = util.format('%d %s', this.code, this.name)
 
 		if (this.params) {
 			data += ':' + CRLF
 			for (const key in this.params) {
-				if (this.params.hasOwnProperty(key)) {
+				if (this.params[key]) {
 					data += util.format('%s: %s', key, this.params[key]) + CRLF
 				}
 			}
@@ -42,121 +46,10 @@ export class TResponse {
 	}
 }
 
-export interface IDeserializedCommand {
+export interface DeserializedCommand {
 	raw: string
 	name: string
 	parameters: { [key: string]: string | undefined }
-}
-
-export namespace DeserializedCommands {
-	export interface IPreviewCommand extends IDeserializedCommand {
-		parameters: {
-			'disk id'?: string
-		}
-	}
-
-	export interface IPlayCommand extends IDeserializedCommand {
-		parameters: {
-			speed?: string
-			loop?: string
-			'single clip'?: string
-		}
-	}
-
-	export interface IPlayrangeSetCommand extends IDeserializedCommand {
-		parameters: {
-			'clip id'?: string
-			in?: string
-			out?: string
-		}
-	}
-
-	export interface IRecordCommand extends IDeserializedCommand {
-		parameters: {
-			name?: string
-		}
-	}
-
-	export interface IClipsGetCommand extends IDeserializedCommand {
-		parameters: {
-			'clip id'?: string
-			count?: string
-		}
-	}
-
-	export interface IClipsAddCommand extends IDeserializedCommand {
-		parameters: {
-			name?: string
-		}
-	}
-
-	export interface ISlotInfoCommand extends IDeserializedCommand {
-		parameters: {
-			'slot id'?: string
-		}
-	}
-
-	export interface ISlotSelectCommand extends IDeserializedCommand {
-		parameters: {
-			'slot id'?: string
-			'video format'?: string
-		}
-	}
-
-	export interface INotifyCommand extends IDeserializedCommand {
-		parameters: {
-			remote?: string
-			transport?: string
-			slot?: string
-			configuration?: string
-			'dropped frames'?: string
-		}
-	}
-
-	export interface IJogCommand extends IDeserializedCommand {
-		parameters: {
-			timecode?: string
-		}
-	}
-
-	export interface IShuttleCommand extends IDeserializedCommand {
-		parameters: {
-			speed?: string
-		}
-	}
-
-	export interface IRemoteCommand extends IDeserializedCommand {
-		parameters: {
-			remote?: string
-		}
-	}
-
-	export interface IConfigurationCommand extends IDeserializedCommand {
-		parameters: {
-			'video input'?: string
-			'audio input'?: string
-			'file format'?: string
-		}
-	}
-
-	export interface IFormatCommand extends IDeserializedCommand {
-		parameters: {
-			prepare?: string
-			confirm?: string
-		}
-	}
-
-	export interface IIdentifyCommand extends IDeserializedCommand {
-		parameters: {
-			enable?: string
-		}
-	}
-
-	export interface IWatchdogCommand extends IDeserializedCommand {
-		parameters: {
-			period?: string
-		}
-	}
 }
 
 export type ResponseCode = ErrorCode | SynchronousCode | AsynchronousCode
@@ -244,152 +137,45 @@ export const ParameterMap = {
 	help: [],
 	commands: [],
 	'device info': [],
-	'disk list': [
-		'slot id'
-	],
+	'disk list': ['slot id'],
 	quit: [],
 	ping: [],
-	preview: [
-		'enable'
-	],
-	play: [
-		'speed',
-		'loop',
-		'single clip'
-	],
-	'playrange set': [
-		'clip id',
-		'in',
-		'out'
-	],
+	preview: ['enable'],
+	play: ['speed', 'loop', 'single clip'],
+	'playrange set': ['clip id', 'in', 'out'],
 	'playrange clear': [],
-	record: [
-		'name'
-	],
-	'stop': [],
+	record: ['name'],
+	stop: [],
 	'clips count': [],
-	'clips get': [
-		'clip id',
-		'count'
-	],
-	'clips add': [
-		'name'
-	],
+	'clips get': ['clip id', 'count'],
+	'clips add': ['name'],
 	'clips clear': [],
 	'transport info': [],
-	'slot info': [
-		'slot id'
-	],
-	'slot select': [
-		'slot id',
-		'video format'
-	],
-	notify: [
-		'remote',
-		'transport',
-		'slot',
-		'configuration',
-		'dropped frames'
-	],
-	goto: [
-		'clip id',
-		'clip',
-		'timeline',
-		'timecode',
-		'slot id'
-	],
-	jog: [
-		'timecode'
-	],
-	shuttle: [
-		'speed'
-	],
-	remote: [
-		'enable',
-		'override'
-	],
-	configuration: [
-		'video input',
-		'audio input',
-		'file format'
-	],
+	'slot info': ['slot id'],
+	'slot select': ['slot id', 'video format'],
+	notify: ['remote', 'transport', 'slot', 'configuration', 'dropped frames'],
+	goto: ['clip id', 'clip', 'timeline', 'timecode', 'slot id'],
+	jog: ['timecode'],
+	shuttle: ['speed'],
+	remote: ['enable', 'override'],
+	configuration: ['video input', 'audio input', 'file format'],
 	uptime: [],
-	format: [
-		'prepare',
-		'confirm'
-	],
-	identify: [
-		'enable'
-	],
-	watchdog: [
-		'period'
-	]
+	format: ['prepare', 'confirm'],
+	identify: ['enable'],
+	watchdog: ['period']
 }
 
-export type IResponse = IHash<string> |
-	ResponseInterface.IDeviceInfo |
-	ResponseInterface.IDiskList |
-	ResponseInterface.IClipsCount |
-	ResponseInterface.IClipsGet |
-	ResponseInterface.ITransportInfo |
-	ResponseInterface.ISlotInfo |
-	ResponseInterface.IConfiguration |
-	ResponseInterface.IUptime |
-	ResponseInterface.IFormat
-
-export namespace ResponseInterface {
-	export interface IDeviceInfo {
-		'protocol version': string
-		model: string
-		'slot count': string
-	}
-
-	export interface IDiskList extends IHash<string> {
-		'slot id': string
-	}
-
-	export interface IClipsCount {
-		'clip count': string
-	}
-
-	export interface IClipsGet extends IHash<string> {
-		'clip count': string
-	}
-
-	export interface ITransportInfo {
-		status: TransportStatus
-		speed: string
-		'slot id': string
-		'clip id': string
-		'single clip': string
-		'display timecode': string
-		'timecode': string
-		'video format': VideoFormat
-		loop: 'string'
-	}
-
-	export interface ISlotInfo {
-		'slot id': string
-		status: SlotStatus
-		'volume name': string
-		'recording time': string
-		'video format': VideoFormat
-	}
-
-	export interface IConfiguration {
-		'audio input': AudioInputs
-		'video input': VideoInputs
-		'file format': FileFormats
-	}
-
-	export interface IUptime {
-		'uptime': string // @todo: is broken in hyperdeck
-	}
-
-	export interface IFormat {
-		'token': string // @todo: is broken in hyperdeck
-	}
-}
+export type Response =
+	| Hash<string>
+	| ResponseInterface.DeviceInfo
+	| ResponseInterface.DiskList
+	| ResponseInterface.ClipsCount
+	| ResponseInterface.ClipsGet
+	| ResponseInterface.TransportInfo
+	| ResponseInterface.SlotInfo
+	| ResponseInterface.Configuration
+	| ResponseInterface.Uptime
+	| ResponseInterface.Format
 
 export enum SlotStatus {
 	EMPTY = 'empty',

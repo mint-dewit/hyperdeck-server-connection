@@ -1,39 +1,58 @@
 import { HyperdeckSocket } from './socket'
-import { IDeserializedCommand, DeserializedCommands, IHash, TResponse, SynchronousCode, CommandNames, ErrorCode, NotifyType, ResponseInterface, IResponse } from './types'
+import {
+	DeserializedCommand,
+	DeserializedCommands,
+	Hash,
+	TResponse,
+	SynchronousCode,
+	CommandNames,
+	ErrorCode,
+	NotifyType,
+	ResponseInterface,
+	IResponse
+} from './types'
 import { createServer, Server } from 'net'
 
 export class HyperdeckServer {
 	private _sockets: { [id: string]: HyperdeckSocket } = {}
 	private _server: Server
 
-	onDeviceInfo: (command: IDeserializedCommand) => Promise<ResponseInterface.IDeviceInfo>
-	onDiskList: (command: IDeserializedCommand) => Promise<ResponseInterface.IDiskList>
-	onPreview: (command: DeserializedCommands.IPreviewCommand) => Promise<void>
-	onPlay: (command: DeserializedCommands.IPlayCommand) => Promise<void>
-	onPlayrangeSet: (command: DeserializedCommands.IPlayrangeSetCommand) => Promise<void>
-	onPlayrangeClear: (command: IDeserializedCommand) => Promise<void>
-	onRecord: (command: DeserializedCommands.IRecordCommand) => Promise<void>
-	onStop: (command: IDeserializedCommand) => Promise<void>
-	onClipsCount: (command: IDeserializedCommand) => Promise<ResponseInterface.IClipsCount>
-	onClipsGet: (command: DeserializedCommands.IClipsGetCommand) => Promise<ResponseInterface.IClipsGet>
-	onClipsAdd: (command: DeserializedCommands.IClipsAddCommand) => Promise<void>
-	onClipsClear: (command: IDeserializedCommand) => Promise<void>
-	onTransportInfo: (command: IDeserializedCommand) => Promise<ResponseInterface.ITransportInfo>
-	onSlotInfo: (command: DeserializedCommands.ISlotInfoCommand) => Promise<ResponseInterface.ISlotInfo>
-	onSlotSelect: (command: DeserializedCommands.ISlotSelectCommand) => Promise<void>
-	onJog: (command: DeserializedCommands.IJogCommand) => Promise<void>
-	onShuttle: (command: DeserializedCommands.IShuttleCommand) => Promise<void>
-	onRemote: (command: DeserializedCommands.IRemoteCommand) => Promise<void>
-	onConfiguration: (command: DeserializedCommands.IConfigurationCommand) => Promise<ResponseInterface.IConfiguration>
-	onUptime: (command: IDeserializedCommand) => Promise<ResponseInterface.IUptime>
-	onFormat: (command: DeserializedCommands.IFormatCommand) => Promise<ResponseInterface.IFormat>
-	onIdentify: (command: DeserializedCommands.IIdentifyCommand) => Promise<void>
-	onWatchdog: (command: DeserializedCommands.IWatchdogCommand) => Promise<void>
+	onDeviceInfo: (command: DeserializedCommand) => Promise<ResponseInterface.DeviceInfo>
+	onDiskList: (command: DeserializedCommand) => Promise<ResponseInterface.DiskList>
+	onPreview: (command: DeserializedCommands.PreviewCommand) => Promise<void>
+	onPlay: (command: DeserializedCommands.PlayCommand) => Promise<void>
+	onPlayrangeSet: (command: DeserializedCommands.PlayrangeSetCommand) => Promise<void>
+	onPlayrangeClear: (command: DeserializedCommand) => Promise<void>
+	onRecord: (command: DeserializedCommands.RecordCommand) => Promise<void>
+	onStop: (command: DeserializedCommand) => Promise<void>
+	onClipsCount: (command: DeserializedCommand) => Promise<ResponseInterface.ClipsCount>
+	onClipsGet: (
+		command: DeserializedCommands.ClipsGetCommand
+	) => Promise<ResponseInterface.ClipsGet>
+	onClipsAdd: (command: DeserializedCommands.ClipsAddCommand) => Promise<void>
+	onClipsClear: (command: DeserializedCommand) => Promise<void>
+	onTransportInfo: (command: DeserializedCommand) => Promise<ResponseInterface.TransportInfo>
+	onSlotInfo: (
+		command: DeserializedCommands.SlotInfoCommand
+	) => Promise<ResponseInterface.SlotInfo>
+	onSlotSelect: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
+	onJog: (command: DeserializedCommands.JogCommand) => Promise<void>
+	onShuttle: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
+	onRemote: (command: DeserializedCommands.RemoteCommand) => Promise<void>
+	onConfiguration: (
+		command: DeserializedCommands.ConfigurationCommand
+	) => Promise<ResponseInterface.Configuration>
+	onUptime: (command: DeserializedCommand) => Promise<ResponseInterface.Uptime>
+	onFormat: (command: DeserializedCommands.FormatCommand) => Promise<ResponseInterface.Format>
+	onIdentify: (command: DeserializedCommands.IdentifyCommand) => Promise<void>
+	onWatchdog: (command: DeserializedCommands.WatchdogCommand) => Promise<void>
 
-	constructor (ip?: string) {
-		this._server = createServer(socket => {
+	constructor(ip?: string) {
+		this._server = createServer((socket) => {
 			const socketId = Math.random().toString(35).substr(-6)
-			this._sockets[socketId] = new HyperdeckSocket(socket, cmd => this._receivedCommand(cmd))
+			this._sockets[socketId] = new HyperdeckSocket(socket, (cmd) =>
+				this._receivedCommand(cmd)
+			)
 			this._sockets[socketId].on('disconnected', () => {
 				delete this._sockets[socketId]
 			})
@@ -43,38 +62,38 @@ export class HyperdeckServer {
 		this._server.listen(9993, ip)
 	}
 
-	close () {
+	close(): void {
 		this._server.unref()
 	}
 
-	notifySlot (params: IHash<string>) {
+	notifySlot(params: Hash<string>): void {
 		this._notify(NotifyType.Slot, params)
 	}
 
-	notifyTransport (params: IHash<string>) {
+	notifyTransport(params: Hash<string>): void {
 		this._notify(NotifyType.Transport, params)
 	}
 
-	private _notify (type: NotifyType, params: IHash<string>) {
+	private _notify(type: NotifyType, params: Hash<string>): void {
 		for (const id of Object.keys(this._sockets)) {
 			this._sockets[id].notify(type, params)
 		}
 	}
 
-	private async _receivedCommand (cmd: IDeserializedCommand): Promise<TResponse> {
-		const intErrorCatch = (err?: { code: number, msg: string }) => {
+	private async _receivedCommand(cmd: DeserializedCommand): Promise<TResponse> {
+		const intErrorCatch = (err?: { code: number; msg: string }) => {
 			if (err) return new TResponse(err.code, err.msg)
 			else return new TResponse(ErrorCode.InternalError, 'internal error')
 		}
-		let executor: ((command: IDeserializedCommand) => Promise<IResponse | void>) | undefined
-		let resHandler: ((res?: IHash<string>) => TResponse) | undefined
+		let executor: ((command: DeserializedCommand) => Promise<IResponse | void>) | undefined
+		let resHandler: ((res?: Hash<string>) => TResponse) | undefined
 
 		if (cmd.name === CommandNames.DeviceInfoCommand) {
 			executor = this.onDeviceInfo
-			resHandler = res => new TResponse(SynchronousCode.DeviceInfo, 'device info', res)
+			resHandler = (res) => new TResponse(SynchronousCode.DeviceInfo, 'device info', res)
 		} else if (cmd.name === CommandNames.DiskListCommand) {
 			executor = this.onDiskList
-			resHandler = res => new TResponse(SynchronousCode.DiskList, 'disk list', res)
+			resHandler = (res) => new TResponse(SynchronousCode.DiskList, 'disk list', res)
 		} else if (cmd.name === CommandNames.PreviewCommand) {
 			executor = this.onPreview
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
@@ -95,10 +114,10 @@ export class HyperdeckServer {
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
 		} else if (cmd.name === CommandNames.ClipsCountCommand) {
 			executor = this.onClipsCount
-			resHandler = res => new TResponse(SynchronousCode.ClipsCount, 'clips count', res)
+			resHandler = (res) => new TResponse(SynchronousCode.ClipsCount, 'clips count', res)
 		} else if (cmd.name === CommandNames.ClipsGetCommand) {
 			executor = this.onClipsGet
-			resHandler = res => new TResponse(SynchronousCode.ClipsInfo, 'clips info', res)
+			resHandler = (res) => new TResponse(SynchronousCode.ClipsInfo, 'clips info', res)
 		} else if (cmd.name === CommandNames.ClipsAddCommand) {
 			executor = this.onClipsAdd
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
@@ -107,14 +126,16 @@ export class HyperdeckServer {
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
 		} else if (cmd.name === CommandNames.TransportInfoCommand) {
 			executor = this.onTransportInfo
-			resHandler = res => new TResponse(SynchronousCode.TransportInfo, 'transport info', res)
+			resHandler = (res) =>
+				new TResponse(SynchronousCode.TransportInfo, 'transport info', res)
 		} else if (cmd.name === CommandNames.SlotInfoCommand) {
 			executor = this.onSlotInfo
-			resHandler = res => new TResponse(SynchronousCode.SlotInfo, 'slot info', res)
+			resHandler = (res) => new TResponse(SynchronousCode.SlotInfo, 'slot info', res)
 		} else if (cmd.name === CommandNames.SlotSelectCommand) {
 			executor = this.onSlotSelect
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.NotifyCommand) { // implemented in socket.ts
+		} else if (cmd.name === CommandNames.NotifyCommand) {
+			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
 		} else if (cmd.name === CommandNames.JogCommand) {
 			executor = this.onJog
@@ -130,13 +151,13 @@ export class HyperdeckServer {
 			}
 		} else if (cmd.name === CommandNames.ConfigurationCommand) {
 			executor = this.onConfiguration
-			resHandler = res => {
+			resHandler = (res) => {
 				if (res) return new TResponse(SynchronousCode.Configuration, 'configuration', res)
 				else return new TResponse(SynchronousCode.OK, 'ok')
 			}
 		} else if (cmd.name === CommandNames.UptimeCommand) {
 			executor = this.onUptime
-			resHandler = res => new TResponse(SynchronousCode.Uptime, 'uptime', res)
+			resHandler = (res) => new TResponse(SynchronousCode.Uptime, 'uptime', res)
 		} else if (cmd.name === CommandNames.FormatCommand) {
 			executor = this.onFormat
 			resHandler = (res?) => {
@@ -146,9 +167,11 @@ export class HyperdeckServer {
 		} else if (cmd.name === CommandNames.IdentifyCommand) {
 			executor = this.onIdentify
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.WatchdogCommand) { // implemented in socket.ts
+		} else if (cmd.name === CommandNames.WatchdogCommand) {
+			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.PingCommand) { // implemented in socket.ts
+		} else if (cmd.name === CommandNames.PingCommand) {
+			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
 		}
 

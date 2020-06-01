@@ -19,8 +19,7 @@ yarn add hyperdeck-server-connection
 
 For library developers installation steps are as following:
 ```sh
-git clone https://github.com/nrkno/tv-automation-hyperdeck-connection
-yarn
+git clone https://github.com/baltedewit/hyperdeck-server-connection
 yarn build
 ```
 

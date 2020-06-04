@@ -36,7 +36,7 @@ export class HyperdeckServer {
 		command: DeserializedCommands.SlotInfoCommand
 	) => Promise<ResponseInterface.SlotInfo>
 	onSlotSelect: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
-	onGoTo: (command: DeserializedCommands.IGoToCommand) => Promise<void>
+	onGoTo: (command: DeserializedCommands.GoToCommand) => Promise<void>
 	onJog: (command: DeserializedCommands.JogCommand) => Promise<void>
 	onShuttle: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
 	onRemote: (command: DeserializedCommands.RemoteCommand) => Promise<void>

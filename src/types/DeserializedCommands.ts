@@ -64,7 +64,7 @@ export interface NotifyCommand extends DeserializedCommand {
 	}
 }
 
-export interface IGoToCommand extends DeserializedCommand {
+export interface GoToCommand extends DeserializedCommand {
 	parameters: {
 		'clip id'?: string
 		clip?: string

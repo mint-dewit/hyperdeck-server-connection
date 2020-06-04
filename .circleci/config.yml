@@ -13,6 +13,9 @@ jobs:
             - yarn-cache-12-
 
       - run: yarn install
+      - persist_to_workspace:
+          root: .
+          paths: [.]
 
   validate-dependencies:
     docker:

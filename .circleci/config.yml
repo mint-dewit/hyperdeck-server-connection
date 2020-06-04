@@ -141,36 +141,35 @@ workflows:
     jobs:
       - init
       - validate-all-dependencies:
+          requires:
+            - init
           filters:
             branches:
               only:
                 - master
                 - develop
-          requires:
-            - init
       - validate-dependencies:
+          requires:
+            - init
           filters:
             branches:
               only:
                 - master
                 - develop
-          requires:
-            - init
       - release:
           requires:
             - validate-dependencies
+            - init
           filters:
             branches:
               only:
                 - master
+      - prerelease:
           requires:
             - init
-      - prerelease:
           filters:
             tags:
               ignore: /.*/
             branches:
               ignore:
                 - master
-          requires:
-            - init

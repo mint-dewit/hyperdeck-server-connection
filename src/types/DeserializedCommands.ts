@@ -64,6 +64,16 @@ export interface NotifyCommand extends DeserializedCommand {
 	}
 }
 
+export interface IGoToCommand extends DeserializedCommand {
+	parameters: {
+		'clip id'?: string
+		clip?: string
+		timeline?: string
+		timecode?: string
+		'slot id'?: string
+	}
+}
+
 export interface JogCommand extends DeserializedCommand {
 	parameters: {
 		timecode?: string

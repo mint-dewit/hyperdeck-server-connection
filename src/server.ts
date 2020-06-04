@@ -9,7 +9,7 @@ import {
 	ErrorCode,
 	NotifyType,
 	ResponseInterface,
-	IResponse
+	Response
 } from './types'
 import { createServer, Server } from 'net'
 
@@ -36,6 +36,7 @@ export class HyperdeckServer {
 		command: DeserializedCommands.SlotInfoCommand
 	) => Promise<ResponseInterface.SlotInfo>
 	onSlotSelect: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
+	onGoTo: (command: DeserializedCommands.IGoToCommand) => Promise<void>
 	onJog: (command: DeserializedCommands.JogCommand) => Promise<void>
 	onShuttle: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
 	onRemote: (command: DeserializedCommands.RemoteCommand) => Promise<void>
@@ -85,7 +86,7 @@ export class HyperdeckServer {
 			if (err) return new TResponse(err.code, err.msg)
 			else return new TResponse(ErrorCode.InternalError, 'internal error')
 		}
-		let executor: ((command: DeserializedCommand) => Promise<IResponse | void>) | undefined
+		let executor: ((command: DeserializedCommand) => Promise<Response | void>) | undefined
 		let resHandler: ((res?: Hash<string>) => TResponse) | undefined
 
 		if (cmd.name === CommandNames.DeviceInfoCommand) {
@@ -137,6 +138,9 @@ export class HyperdeckServer {
 		} else if (cmd.name === CommandNames.NotifyCommand) {
 			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
+		} else if (cmd.name === CommandNames.GoToCommand) {
+			executor = this.onGoTo
+			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
 		} else if (cmd.name === CommandNames.JogCommand) {
 			executor = this.onJog
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')

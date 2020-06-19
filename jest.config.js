@@ -4,7 +4,7 @@ module.exports = {
 	transform: {
 		'^.+\\.(ts|tsx)$': 'ts-jest'
 	},
-	testMatch: ['**/__tests__/**/*.spec.(ts|js)'],
+	testMatch: ['<rootDir>/src/**/__tests__/**/*.spec.(ts|js)'],
 	testPathIgnorePatterns: ['integrationTests'],
 	testEnvironment: 'node',
 	coverageThreshold: {
@@ -15,6 +15,11 @@ module.exports = {
 			statements: 0
 		}
 	},
-	coverageDirectory: './coverage/',
+	globals: {
+		'ts-jest': {
+			tsConfig: '<rootDir>/tsconfig.jest.json'
+		}
+	},
+	coverageDirectory: '<rootDir>/coverage/',
 	collectCoverage: true
 }

@@ -1,9 +1,9 @@
-
 # Hyperdeck server connection
 
 [![CircleCI](https://circleci.com/gh/baltedewit/hyperdeck-server-connection.svg?style=svg)](https://circleci.com/gh/baltedewit/hyperdeck-server-connection)
 
 ## Technology highlights
+
 - Typescript
 - Yarn
 - Jest
@@ -18,6 +18,7 @@ yarn add hyperdeck-server-connection
 ``` -->
 
 For library developers installation steps are as following:
+
 ```sh
 git clone https://github.com/baltedewit/hyperdeck-server-connection
 yarn build
@@ -32,33 +33,33 @@ const { HyperdeckServer } = require('../dist/server')
 const myHyperdeck = new Hyperdeck()
 
 const s = new HyperdeckServer()
-s.onPlay = cmd => {
-    console.log('playing', cmd)
-    status.status = 'play'
-    s.notifyTransport({
-        ...status,
-        speed: '100',
-        'slot id': '1',
-        'clip id': '1',
-        'single clip': 'true',
-        'video format': '1080i50',
-        loop: false
-    })
-    return Promise.resolve()
+s.onPlay = async (cmd) => {
+	console.log('playing', cmd)
+	status.status = 'play'
+	s.notifyTransport({
+		...status,
+		speed: '100',
+		'slot id': '1',
+		'clip id': '1',
+		'single clip': 'true',
+		'video format': '1080i50',
+		loop: false
+	})
 }
 ```
 
 ### Events
 
-
 ## Test
 
 This module will run tests by jest. (TBD)
+
 ```sh
 $ yarn unit
 ```
+
 ## Acknowledgements
 
-* Inspired by [CasparCG Hyperdeck](https://github.com/peschuster/casparcg-hyperdeck) from [peschuster](https://github.com/peschuster)
-* Parser and some constants are derived from [hyperdeck-connection](https://github.com/nrkno/tv-automation-hyperdeck-connection)
-* The public callback-promise API was inspired by [mos-connection](https://github.com/nrkno/tv-automation-mos-connection)
+- Inspired by [CasparCG Hyperdeck](https://github.com/peschuster/casparcg-hyperdeck) from [peschuster](https://github.com/peschuster)
+- Parser and some constants are derived from [hyperdeck-connection](https://github.com/nrkno/tv-automation-hyperdeck-connection)
+- The public callback-promise API was inspired by [mos-connection](https://github.com/nrkno/tv-automation-mos-connection)

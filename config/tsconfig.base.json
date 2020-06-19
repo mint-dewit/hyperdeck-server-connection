@@ -1,37 +1,24 @@
 {
-  "extends": "./tsconfig.strict",
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "noImplicitAny": false,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "outDir": "../dist",
-    "baseUrl": "../",
-    "paths": {
-      "*": [
-        "../node_modules/*",
-        "../src/types/*"
-      ],
-      "hyperdeck-connection": [
-        "../src/index.ts"
-      ]
-    },
-    "declaration": true,
-    "importHelpers": true,
-    "listFiles": false,
-    "traceResolution": false,
-    "pretty": true,
-    "lib": [
-      "es6"
-    ],
-    "types": [
-      "node",
-      "jest"
-    ]
-  },
-  "include": [
-    "../src/**/*.ts"
-  ],
-  "compileOnSave": false
+	"compilerOptions": {
+		"module": "commonjs",
+		// ES2016 supports node >=7.5.0, according to https://node.green/#ES2016
+		"target": "ES2016",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"strictNullChecks": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"declaration": true,
+		"declarationMap": true,
+		"importHelpers": true,
+		"listFiles": false,
+		"traceResolution": false,
+		"lib": ["ESNext"],
+		"types": ["node"]
+	}
 }

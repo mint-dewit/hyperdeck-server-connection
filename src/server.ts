@@ -8,8 +8,7 @@ import {
 	CommandNames,
 	ErrorCode,
 	NotifyType,
-	ResponseInterface,
-	Response
+	ResponseInterface
 } from './types'
 import { createServer, Server } from 'net'
 
@@ -82,11 +81,13 @@ export class HyperdeckServer {
 	}
 
 	private async _receivedCommand(cmd: DeserializedCommand): Promise<TResponse> {
-		const intErrorCatch = (err?: { code: number; msg: string }) => {
+		const intErrorCatch = (err?: { code: number; msg: string }): TResponse => {
 			if (err) return new TResponse(err.code, err.msg)
 			else return new TResponse(ErrorCode.InternalError, 'internal error')
 		}
-		let executor: ((command: DeserializedCommand) => Promise<Response | void>) | undefined
+		let executor:
+			| ((command: DeserializedCommand) => Promise<typeof ResponseInterface | void>)
+			| undefined
 		let resHandler: ((res?: Hash<string>) => TResponse) | undefined
 
 		if (cmd.name === CommandNames.DeviceInfoCommand) {

@@ -1,6 +1,7 @@
 {
-  "extends": "./config/tsconfig.base",
-  "exclude": [
-    "node_modules/**"
-  ]
+	"extends": "./config/tsconfig.base.json",
+	"include": ["src/**/*.spec.ts"],
+	"compilerOptions": {
+		"types": ["node", "jest"]
+	}
 }

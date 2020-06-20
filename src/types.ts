@@ -122,6 +122,7 @@ export enum CommandNames {
 	SlotInfoCommand = 'slot info',
 	SlotSelectCommand = 'slot select',
 	NotifyCommand = 'notify',
+	GoToCommand = 'goto',
 	JogCommand = 'jog',
 	ShuttleCommand = 'shuttle',
 	RemoteCommand = 'remote',

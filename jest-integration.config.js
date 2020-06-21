@@ -1,4 +1,3 @@
-/*global module */
 module.exports = {
 	globals: {
 		'ts-jest': {

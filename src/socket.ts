@@ -77,14 +77,18 @@ export class HyperdeckSocket extends EventEmitter {
 				const notifyCmd = cmd as DeserializedCommands.NotifyCommand
 
 				if (Object.keys(notifyCmd.parameters).length > 0) {
-					for (const param of Object.keys(notifyCmd.parameters)) {
+					for (const param of Object.keys(notifyCmd.parameters) as Array<
+						keyof typeof notifyCmd.parameters
+					>) {
 						if (this._notifySettings[param] !== undefined) {
 							this._notifySettings[param] = notifyCmd.parameters[param] === 'true'
 						}
 					}
 				} else {
 					const settings: Hash<string> = {}
-					for (const key in Object.keys(this._notifySettings)) {
+					for (const key of Object.keys(this._notifySettings) as Array<
+						keyof HyperdeckSocket['_notifySettings']
+					>) {
 						settings[key] = this._notifySettings[key] ? 'true' : 'false'
 					}
 					this.sendResponse(new TResponse(SynchronousCode.Notify, 'notify', settings))

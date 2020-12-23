@@ -52,6 +52,11 @@ export interface Configuration {
 	'file format': FileFormats
 }
 
+export interface RemoteOptions {
+	enabled: boolean
+	override: boolean
+}
+
 export interface Uptime {
 	uptime: string // @todo: is broken in hyperdeck
 }

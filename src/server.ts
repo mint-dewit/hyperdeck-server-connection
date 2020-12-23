@@ -38,7 +38,9 @@ export class HyperdeckServer {
 	onGoTo: (command: DeserializedCommands.GoToCommand) => Promise<void>
 	onJog: (command: DeserializedCommands.JogCommand) => Promise<void>
 	onShuttle: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
-	onRemote: (command: DeserializedCommands.RemoteCommand) => Promise<void>
+	onRemote: (
+		command: DeserializedCommands.RemoteCommand
+	) => Promise<ResponseInterface.RemoteOptions>
 	onConfiguration: (
 		command: DeserializedCommands.ConfigurationCommand
 	) => Promise<ResponseInterface.Configuration>

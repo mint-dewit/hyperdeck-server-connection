@@ -49,7 +49,7 @@ export class HyperdeckServer {
 	onIdentify: (command: DeserializedCommands.IdentifyCommand) => Promise<void>
 	onWatchdog: (command: DeserializedCommands.WatchdogCommand) => Promise<void>
 
-	constructor(ip?: string) {
+	constructor(ip?: string, port = 9993, maxConnections = 1) {
 		this._server = createServer((socket) => {
 			const socketId = Math.random().toString(35).substr(-6)
 			this._sockets[socketId] = new HyperdeckSocket(socket, (cmd) =>
@@ -60,8 +60,8 @@ export class HyperdeckServer {
 			})
 		})
 		this._server.on('listening', () => console.log('listening'))
-		this._server.maxConnections = 1
-		this._server.listen(9993, ip)
+		this._server.maxConnections = maxConnections // this mimics an actual hyperdeck and is useful for mocking. less useful for doing practical things.
+		this._server.listen(port, ip)
 	}
 
 	close(): void {

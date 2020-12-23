@@ -65,7 +65,7 @@ export class HyperdeckSocket extends EventEmitter {
 					this._watchdogTimer = setInterval(() => {
 						if (
 							Date.now() - this._lastReceived >
-							Number(watchdogCmd.parameters.period)
+							Number(watchdogCmd.parameters.period) * 1000
 						) {
 							this._socket.destroy()
 							this.emit('disconnected')

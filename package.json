@@ -7,6 +7,7 @@
 	"module": "dist/module/index.js",
 	"browser": "dist/browser/index.js",
 	"license": "MIT",
+	"homepage": "https://github.com/baltedewit/hyperdeck-server-connection#readme",
 	"contributors": [
 		{
 			"name": "Balte de Wit",

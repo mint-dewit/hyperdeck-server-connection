@@ -58,36 +58,6 @@ jobs:
         env:
           CI: true
 
-  typedoc:
-    name: Publish Libs Typedoc
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    timeout-minutes: 15
-
-    # only run for release tags
-    # TODO - we should only do this if the latest release
-    if: contains(github.ref, 'refs/tags/')
-
-    needs: release
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Prepare Environment
-        run: |
-          yarn install
-        env:
-          CI: true
-      - name: Run typecheck and linter
-        run: |
-          yarn docs
-          yarn gh-pages -d docs
-        env:
-          CI: true
-
   prerelease:
     name: Prerelease Lib
     runs-on: ubuntu-latest

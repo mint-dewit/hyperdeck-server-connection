@@ -4,8 +4,6 @@
 	"description": "Typescript Node.js library for emulating a Blackmagic Hyperdeck",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
-	"module": "dist/module/index.js",
-	"browser": "dist/browser/index.js",
 	"license": "MIT",
 	"homepage": "https://github.com/baltedewit/hyperdeck-server-connection#readme",
 	"contributors": [
@@ -16,7 +14,10 @@
 		}
 	],
 	"files": [
-		"dist"
+		"/dist",
+		"/CHANGELOG.md",
+		"/README.md",
+		"/LICENSE"
 	],
 	"scripts": {
 		"build": "trash dist && yarn build:main",

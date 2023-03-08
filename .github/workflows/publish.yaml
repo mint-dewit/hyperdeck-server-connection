@@ -1,0 +1,54 @@
+name: Publish prerelease
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  prerelease:
+    name: Prerelease
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      - name: Check release is desired
+        id: do-publish
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "No Token"
+          elif [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "Publish nightly"
+            echo "publish=nightly" >> $GITHUB_OUTPUT
+          else
+            echo "Publish experimental"
+            echo "publish=experimental" >> $GITHUB_OUTPUT
+          fi
+      - name: Prepare Environment
+        if: ${{ steps.do-publish.outputs.publish }}
+        run: |
+          yarn install
+        env:
+          CI: true
+      - name: Bump version and build
+        if: ${{ steps.do-publish.outputs.publish }}
+        run: |
+          PRERELEASE_TAG=nightly-$(echo "${{ github.ref_name }}" | sed -r 's/[^a-z0-9]+/-/gi')
+          yarn release --prerelease $PRERELEASE_TAG
+        env:
+          CI: true
+      - name: Publish to NPM
+        if: ${{ steps.do-publish.outputs.publish }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          yarn publish --access=public --new-version=$NEW_VERSION --network-timeout 100000 --tag "${{ steps.do-publish.outputs.publish }}"
+          echo "**Published:** $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+        env:
+          CI: true

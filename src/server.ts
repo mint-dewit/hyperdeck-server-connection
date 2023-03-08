@@ -16,43 +16,43 @@ export class HyperdeckServer {
 	private _sockets: { [id: string]: HyperdeckSocket } = {}
 	private _server: Server
 
-	onDeviceInfo: (command: DeserializedCommand) => Promise<ResponseInterface.DeviceInfo>
-	onDiskList: (command: DeserializedCommand) => Promise<ResponseInterface.DiskList>
-	onPreview: (command: DeserializedCommands.PreviewCommand) => Promise<void>
-	onPlay: (command: DeserializedCommands.PlayCommand) => Promise<void>
-	onPlayrangeSet: (command: DeserializedCommands.PlayrangeSetCommand) => Promise<void>
-	onPlayrangeClear: (command: DeserializedCommand) => Promise<void>
-	onRecord: (command: DeserializedCommands.RecordCommand) => Promise<void>
-	onStop: (command: DeserializedCommand) => Promise<void>
-	onClipsCount: (command: DeserializedCommand) => Promise<ResponseInterface.ClipsCount>
-	onClipsGet: (
+	onDeviceInfo?: (command: DeserializedCommand) => Promise<ResponseInterface.DeviceInfo>
+	onDiskList?: (command: DeserializedCommand) => Promise<ResponseInterface.DiskList>
+	onPreview?: (command: DeserializedCommands.PreviewCommand) => Promise<void>
+	onPlay?: (command: DeserializedCommands.PlayCommand) => Promise<void>
+	onPlayrangeSet?: (command: DeserializedCommands.PlayrangeSetCommand) => Promise<void>
+	onPlayrangeClear?: (command: DeserializedCommand) => Promise<void>
+	onRecord?: (command: DeserializedCommands.RecordCommand) => Promise<void>
+	onStop?: (command: DeserializedCommand) => Promise<void>
+	onClipsCount?: (command: DeserializedCommand) => Promise<ResponseInterface.ClipsCount>
+	onClipsGet?: (
 		command: DeserializedCommands.ClipsGetCommand
 	) => Promise<ResponseInterface.ClipsGet>
-	onClipsAdd: (command: DeserializedCommands.ClipsAddCommand) => Promise<void>
-	onClipsClear: (command: DeserializedCommand) => Promise<void>
-	onTransportInfo: (command: DeserializedCommand) => Promise<ResponseInterface.TransportInfo>
-	onSlotInfo: (
+	onClipsAdd?: (command: DeserializedCommands.ClipsAddCommand) => Promise<void>
+	onClipsClear?: (command: DeserializedCommand) => Promise<void>
+	onTransportInfo?: (command: DeserializedCommand) => Promise<ResponseInterface.TransportInfo>
+	onSlotInfo?: (
 		command: DeserializedCommands.SlotInfoCommand
 	) => Promise<ResponseInterface.SlotInfo>
-	onSlotSelect: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
-	onGoTo: (command: DeserializedCommands.GoToCommand) => Promise<void>
-	onJog: (command: DeserializedCommands.JogCommand) => Promise<void>
-	onShuttle: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
-	onRemote: (
+	onSlotSelect?: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
+	onGoTo?: (command: DeserializedCommands.GoToCommand) => Promise<void>
+	onJog?: (command: DeserializedCommands.JogCommand) => Promise<void>
+	onShuttle?: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
+	onRemote?: (
 		command: DeserializedCommands.RemoteCommand
 	) => Promise<ResponseInterface.RemoteOptions>
-	onConfiguration: (
+	onConfiguration?: (
 		command: DeserializedCommands.ConfigurationCommand
 	) => Promise<ResponseInterface.Configuration>
-	onUptime: (command: DeserializedCommand) => Promise<ResponseInterface.Uptime>
-	onFormat: (command: DeserializedCommands.FormatCommand) => Promise<ResponseInterface.Format>
-	onIdentify: (command: DeserializedCommands.IdentifyCommand) => Promise<void>
-	onWatchdog: (command: DeserializedCommands.WatchdogCommand) => Promise<void>
+	onUptime?: (command: DeserializedCommand) => Promise<ResponseInterface.Uptime>
+	onFormat?: (command: DeserializedCommands.FormatCommand) => Promise<ResponseInterface.Format>
+	onIdentify?: (command: DeserializedCommands.IdentifyCommand) => Promise<void>
+	onWatchdog?: (command: DeserializedCommands.WatchdogCommand) => Promise<void>
 
 	constructor(ip?: string, port = 9993, maxConnections = 1) {
 		this._server = createServer((socket) => {
 			const socketId = Math.random().toString(35).substr(-6)
-			this._sockets[socketId] = new HyperdeckSocket(socket, (cmd) =>
+			this._sockets[socketId] = new HyperdeckSocket(socket, async (cmd) =>
 				this._receivedCommand(cmd)
 			)
 			this._sockets[socketId].on('disconnected', () => {
@@ -90,7 +90,7 @@ export class HyperdeckServer {
 		let executor:
 			| ((command: DeserializedCommand) => Promise<typeof ResponseInterface | void>)
 			| undefined
-		let resHandler: ((res?: Hash<string>) => TResponse) | undefined
+		let resHandler: ((res: Hash<string> | void) => TResponse) | undefined
 
 		if (cmd.name === CommandNames.DeviceInfoCommand) {
 			executor = this.onDeviceInfo

@@ -1,7 +1,7 @@
 {
-	"extends": "./config/tsconfig.base.json",
-	"exclude": ["src/**/*.spec.ts", "src/**/__mocks__/*"],
+	"extends": "./tsconfig.build.json",
+	"exclude": ["node_modules/**"],
 	"compilerOptions": {
-		"outDir": "dist"
+		"types": ["node"]
 	}
 }

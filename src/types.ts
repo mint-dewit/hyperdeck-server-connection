@@ -20,9 +20,9 @@ export interface NotififcationConfig {
 export class TResponse {
 	public code: ResponseCode
 	public name: string
-	public params: Hash<string>
+	public params?: Hash<string>
 
-	constructor(code: ResponseCode, name: string, params?: Hash<string>) {
+	constructor(code: ResponseCode, name: string, params: Hash<string> | void) {
 		this.code = code
 		this.name = name
 		if (params) this.params = params

@@ -17,8 +17,8 @@ export class HyperdeckSocket extends EventEmitter {
 	private _socket: Socket
 	private _parser: MultilineParser
 	private _receivedCommand: (cmd: DeserializedCommand) => Promise<TResponse>
-	private _lastReceived: number
-	private _watchdogTimer: NodeJS.Timer
+	private _lastReceived?: number
+	private _watchdogTimer?: NodeJS.Timer
 
 	private _notifySettings = {
 		slot: false,
@@ -64,8 +64,9 @@ export class HyperdeckSocket extends EventEmitter {
 				if (watchdogCmd.parameters.period) {
 					this._watchdogTimer = setInterval(() => {
 						if (
+							this._lastReceived &&
 							Date.now() - this._lastReceived >
-							Number(watchdogCmd.parameters.period) * 1000
+								Number(watchdogCmd.parameters.period) * 1000
 						) {
 							this._socket.destroy()
 							this.emit('disconnected')

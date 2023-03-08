@@ -39,24 +39,31 @@ describe('npm publish', () => {
 		- LICENSE
 		- README.md
 		- dist/index.d.ts
+		- dist/index.d.ts.map
 		- dist/index.js
 		- dist/index.js.map
 		- dist/parser.d.ts
+		- dist/parser.d.ts.map
 		- dist/parser.js
 		- dist/parser.js.map
 		- dist/server.d.ts
+		- dist/server.d.ts.map
 		- dist/server.js
 		- dist/server.js.map
 		- dist/socket.d.ts
+		- dist/socket.d.ts.map
 		- dist/socket.js
 		- dist/socket.js.map
 		- dist/types.d.ts
+		- dist/types.d.ts.map
 		- dist/types.js
 		- dist/types.js.map
 		- dist/types/DeserializedCommands.d.ts
+		- dist/types/DeserializedCommands.d.ts.map
 		- dist/types/DeserializedCommands.js
 		- dist/types/DeserializedCommands.js.map
 		- dist/types/ResponseInterface.d.ts
+		- dist/types/ResponseInterface.d.ts.map
 		- dist/types/ResponseInterface.js
 		- dist/types/ResponseInterface.js.map
 		"

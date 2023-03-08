@@ -1,6 +1,6 @@
 {
 	"name": "hyperdeck-server-connection",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Typescript Node.js library for emulating a Blackmagic Hyperdeck",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",

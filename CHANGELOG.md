@@ -1,6 +1,19 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.0.4](https://github.com/baltedewit/hyperdeck-server-connection/compare/0.0.3...0.0.4) (2023-03-08)
+
+### Features
+
+- add github actions flow ([809f8a1](https://github.com/baltedewit/hyperdeck-server-connection/commit/809f8a1f9322b62444b48a00ae35dd0024df45a0))
+- GoTo command [publish] ([faad3bf](https://github.com/baltedewit/hyperdeck-server-connection/commit/faad3bf2777f562a0feb08d0e5d6c54687ee64ee))
+- set port and maxConnections ([c0c0d83](https://github.com/baltedewit/hyperdeck-server-connection/commit/c0c0d831792d343182dbbd3838f4cef9c8ecef40))
+
+### Bug Fixes
+
+- remote return typings ([311429b](https://github.com/baltedewit/hyperdeck-server-connection/commit/311429b1598eeae0f59b9e63254ba1abc912171a))
+- watchdog ([4fe30b9](https://github.com/baltedewit/hyperdeck-server-connection/commit/4fe30b9a4f291f4d960557dde89b02b5f6c6294d))
 
 <a name="0.0.3"></a>
 

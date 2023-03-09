@@ -25,7 +25,7 @@
 		"lint": "yarn lint:raw .",
 		"lint:fix": "yarn lint --fix",
 		"changelog": "yarn sofie-version",
-		"release": "yarn reset && yarn lint && yarn changelog",
+		"release": "yarn lint && yarn changelog",
 		"reset": "git clean -dfx && git reset --hard && yarn",
 		"validate:dependencies": "yarn audit --groups dependencies && yarn license-validate",
 		"validate:dev-dependencies": "yarn audit --groups devDependencies",

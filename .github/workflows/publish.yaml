@@ -36,7 +36,13 @@ jobs:
           yarn install
         env:
           CI: true
-      - name: Bump version and build
+      - name: Build library
+        if: ${{ steps.do-publish.outputs.publish }}
+        run: |
+          yarn build
+        env:
+          CI: true
+      - name: Bump version
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
           PRERELEASE_TAG=nightly-$(echo "${{ github.ref_name }}" | sed -r 's/[^a-z0-9]+/-/gi')

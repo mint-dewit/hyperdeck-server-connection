@@ -58,6 +58,12 @@ jobs:
           yarn install
         env:
           CI: true
+      - name: Build library
+        if: ${{ steps.do-publish.outputs.tag }}
+        run: |
+          yarn build
+        env:
+          CI: true
       - name: Publish to NPM
         if: ${{ steps.do-publish.outputs.tag }}
         run: |

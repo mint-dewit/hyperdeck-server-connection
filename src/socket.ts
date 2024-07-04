@@ -44,7 +44,7 @@ export class HyperdeckSocket extends EventEmitter {
 
 		this.sendResponse(
 			new TResponse(AsynchronousCode.ConnectionInfo, 'connection info', {
-				'protocol version': '1.6',
+				'protocol version': '1.8',
 				model: 'NodeJS Hyperdeck Server Library'
 			})
 		)

@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+
+## [0.2.0](https://github.com/baltedewit/hyperdeck-server-connection/compare/0.0.4...v0.2.0) (Tue Jul 09 2024)
+
+## Breaking changes
+
+### Features
+
+- **!** update library to node 12 [d5f04df](https://github.com/baltedewit/hyperdeck-server-connection/commit/d5f04df21f27c49d53ff0732371aea22a657982f)
 
 ### [0.0.4](https://github.com/baltedewit/hyperdeck-server-connection/compare/0.0.3...0.0.4) (2023-03-08)
 

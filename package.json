@@ -5,7 +5,7 @@
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
 	"license": "MIT",
-	"homepage": "https://github.com/baltedewit/hyperdeck-server-connection#readme",
+	"homepage": "https://github.com/mint-dewit/hyperdeck-server-connection#readme",
 	"contributors": [
 		{
 			"name": "Mint de Wit",

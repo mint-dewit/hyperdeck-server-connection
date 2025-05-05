@@ -46,7 +46,7 @@ jobs:
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
           PRERELEASE_TAG=nightly-$(echo "${{ github.ref_name }}" | sed -r 's/[^a-z0-9]+/-/gi')
-          npm run release --prerelease $PRERELEASE_TAG
+          npx sofie-version --prerelease $PRERELEASE_TAG
         env:
           CI: true
       - name: Publish to NPM

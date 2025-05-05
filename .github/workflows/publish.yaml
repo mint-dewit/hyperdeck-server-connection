@@ -14,10 +14,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Use Node.js 14.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 20.x
       - name: Check release is desired
         id: do-publish
         run: |
@@ -33,20 +33,20 @@ jobs:
       - name: Prepare Environment
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
-          yarn install
+          npm install
         env:
           CI: true
       - name: Build library
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
-          yarn build
+          npm run build
         env:
           CI: true
       - name: Bump version
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
           PRERELEASE_TAG=nightly-$(echo "${{ github.ref_name }}" | sed -r 's/[^a-z0-9]+/-/gi')
-          yarn release --prerelease $PRERELEASE_TAG
+          npm run release --prerelease $PRERELEASE_TAG
         env:
           CI: true
       - name: Publish to NPM
@@ -54,7 +54,7 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
           NEW_VERSION=$(node -p "require('./package.json').version")
-          yarn publish --access=public --new-version=$NEW_VERSION --network-timeout 100000 --tag "${{ steps.do-publish.outputs.publish }}"
+          npm publish --access=public --new-version=$NEW_VERSION --network-timeout 100000 --tag "${{ steps.do-publish.outputs.publish }}"
           echo "**Published:** $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
         env:
           CI: true

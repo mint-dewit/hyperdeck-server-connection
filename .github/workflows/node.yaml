@@ -21,10 +21,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Use Node.js 14.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 20.x
       - name: Check release is desired
         id: do-publish
         run: |
@@ -32,8 +32,8 @@ jobs:
             echo "No Token"
           else
 
-            PACKAGE_NAME=$(yarn info -s . name)
-            PUBLISHED_VERSION=$(yarn info -s $PACKAGE_NAME version)
+            PACKAGE_NAME=$(npm info -s . name)
+            PUBLISHED_VERSION=$(npm info -s $PACKAGE_NAME version)
             THIS_VERSION=$(node -p "require('./package.json').version")
             # Simple bash helper to comapre version numbers
             verlte() {
@@ -55,13 +55,13 @@ jobs:
       - name: Prepare build
         if: ${{ steps.do-publish.outputs.tag }}
         run: |
-          yarn install
+          npm install
         env:
           CI: true
       - name: Build library
         if: ${{ steps.do-publish.outputs.tag }}
         run: |
-          yarn build
+          npm run build
         env:
           CI: true
       - name: Publish to NPM
@@ -69,7 +69,7 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
           NEW_VERSION=$(node -p "require('./package.json').version")
-          yarn publish --access=public --new-version=$NEW_VERSION --network-timeout 100000 --tag ${{ steps.do-publish.outputs.tag }}
+          npm publish --access=public --new-version=$NEW_VERSION --network-timeout 100000 --tag ${{ steps.do-publish.outputs.tag }}
 
           echo "**Published:** $NEW_VERSION" >> $GITHUB_STEP_SUMMARY
         env:
@@ -82,19 +82,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 14.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 20.x
       - name: Prepare Environment
         run: |
-          yarn install
+          npm install
         env:
           CI: true
       - name: Validate production dependencies
         run: |
           if ! git log --format=oneline -n 1 | grep -q "\[ignore-audit\]"; then
-            yarn validate:dependencies
+            npm run validate:dependencies
           else
             echo "Skipping audit"
           fi
@@ -109,22 +109,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 14.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 20.x
       - name: Prepare Environment
         run: |
-          yarn install
+          npm install
         env:
           CI: true
       - name: Validate production dependencies
         run: |
-          yarn validate:dependencies
+          npm run validate:dependencies
         env:
           CI: true
       - name: Validate dev dependencies
         run: |
-          yarn validate:dev-dependencies
+          npm run validate:dev-dependencies
         env:
           CI: true

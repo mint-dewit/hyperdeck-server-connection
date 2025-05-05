@@ -44,7 +44,7 @@
 		"open source"
 	],
 	"devDependencies": {
-		"@sofie-automation/code-standard-preset": "^3.0.0",
+		"@sofie-automation/code-standard-preset": "github:mint-dewit/code-standard-preset#v3.0.0-feat-sofie-version-npm",
 		"@types/node": "^22.15.3",
 		"eslint": "^9.26.0",
 		"husky": "^9.1.7",

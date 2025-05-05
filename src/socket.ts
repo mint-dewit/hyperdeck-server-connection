@@ -10,8 +10,8 @@ import {
 	NotifyType,
 	Hash,
 	SynchronousCode
-} from './types'
-import { MultilineParser } from './parser'
+} from './types.js'
+import { MultilineParser } from './parser.js'
 
 export class HyperdeckSocket extends EventEmitter {
 	private _socket: Socket

@@ -1,4 +1,4 @@
-import { HyperdeckSocket } from './socket'
+import { HyperdeckSocket } from './socket.js'
 import {
 	DeserializedCommand,
 	DeserializedCommands,
@@ -9,7 +9,7 @@ import {
 	ErrorCode,
 	NotifyType,
 	ResponseInterface
-} from './types'
+} from './types.js'
 import { createServer, Server } from 'net'
 
 export class HyperdeckServer {

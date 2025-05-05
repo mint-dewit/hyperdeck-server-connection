@@ -7,7 +7,7 @@
 		"baseUrl": "./",
 		"paths": {
 			"*": ["./node_modules/*"],
-			"{{PACKAGE-NAME}}": ["./src/index.ts"]
+			"hyperdeck-server-connection": ["./src/index.ts"]
 		},
 		"types": ["node"]
 	}

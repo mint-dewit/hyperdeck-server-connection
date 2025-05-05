@@ -1,4 +1,4 @@
-import { DeserializedCommand } from '../types'
+import { DeserializedCommand } from '../types.js'
 
 export interface PreviewCommand extends DeserializedCommand {
 	parameters: {

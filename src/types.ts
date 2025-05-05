@@ -1,7 +1,7 @@
 import * as util from 'util'
 
-import * as DeserializedCommands from './types/DeserializedCommands'
-import * as ResponseInterface from './types/ResponseInterface'
+import * as DeserializedCommands from './types/DeserializedCommands.js'
+import * as ResponseInterface from './types/ResponseInterface.js'
 export { DeserializedCommands, ResponseInterface }
 
 export const CRLF = '\r\n'

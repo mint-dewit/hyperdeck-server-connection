@@ -1,4 +1,4 @@
-import { DeserializedCommand, Hash, ParameterMap } from './types'
+import { DeserializedCommand, Hash, ParameterMap } from './types.js'
 
 export class MultilineParser {
 	private _debug: boolean

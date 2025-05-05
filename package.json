@@ -8,9 +8,8 @@
 	"homepage": "https://github.com/baltedewit/hyperdeck-server-connection#readme",
 	"contributors": [
 		{
-			"name": "Balte de Wit",
-			"email": "contact@balte.nl",
-			"url": "https://balte.nl"
+			"name": "Mint de Wit",
+			"email": "mint@araminta.dev"
 		}
 	],
 	"files": [
@@ -20,28 +19,20 @@
 		"/LICENSE"
 	],
 	"scripts": {
-		"build": "trash dist && yarn build:main",
-		"build:main": "tsc",
-		"lint": "yarn lint:raw .",
-		"lint:fix": "yarn lint --fix",
-		"changelog": "yarn sofie-version",
-		"release": "yarn lint && yarn changelog",
-		"reset": "git clean -dfx && git reset --hard && yarn",
-		"validate:dependencies": "yarn audit --groups dependencies && yarn license-validate",
-		"validate:dev-dependencies": "yarn audit --groups devDependencies",
-		"lint:raw": "eslint --ext .ts --ext .js --ext .tsx --ext .jsx --ignore-pattern dist",
-		"lint-fix": "yarn lint --fix",
-		"license-validate": "yarn sofie-licensecheck"
+		"build": "trash dist && build:main",
+		"build:main": "tsc -p ./tsconfig.build.json",
+		"changelog": "npx sofie-version",
+		"release": "npm run lint && npm run changelog",
+		"validate:dependencies": "npm audit --groups dependencies && yarn license-validate",
+		"validate:dev-dependencies": "npm audit --groups devDependencies",
+		"prepare": "husky",
+		"lint:raw": "eslint",
+		"lint": "npm run lint:raw .",
+		"lint-fix": "npm run lint --fix",
+		"license-validate": "npx sofie-licensecheck"
 	},
 	"engines": {
-		"node": ">=12"
-	},
-	"devDependencies": {
-		"@sofie-automation/code-standard-preset": "^2.3.1",
-		"@types/long": "^4.0.1",
-		"@types/node": "12",
-		"trash-cli": "^3.0.0",
-		"typescript": "^4.9.5"
+		"node": ">=20"
 	},
 	"keywords": [
 		"blackmagic",
@@ -51,5 +42,25 @@
 		"typescript",
 		"javascript",
 		"open source"
-	]
+	],
+	"devDependencies": {
+		"@sofie-automation/code-standard-preset": "^3.0.0",
+		"@types/node": "^22.15.3",
+		"eslint": "^9.26.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.1",
+		"prettier": "^3.5.3",
+		"trash-cli": "^6.0.0",
+		"typescript": "^5.7.3"
+	},
+	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
+	"lint-staged": {
+		"*.{css,json,md,scss}": [
+			"prettier --write"
+		],
+		"*.{ts,tsx,js,jsx}": [
+			"npm run lint:raw --fix"
+		]
+	},
+	"packageManager": "npm@10.9.2"
 }

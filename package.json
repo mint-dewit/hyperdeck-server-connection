@@ -19,7 +19,7 @@
 		"/LICENSE"
 	],
 	"scripts": {
-		"build": "trash dist && build:main",
+		"build": "npx trash dist && npm run build:main",
 		"build:main": "tsc -p ./tsconfig.build.json",
 		"changelog": "npx sofie-version",
 		"release": "npm run lint && npm run changelog",
@@ -28,7 +28,7 @@
 		"prepare": "husky",
 		"lint:raw": "eslint",
 		"lint": "npm run lint:raw .",
-		"lint-fix": "npm run lint --fix",
+		"lint-fix": "npm run lint -- --fix",
 		"license-validate": "npx sofie-licensecheck"
 	},
 	"engines": {

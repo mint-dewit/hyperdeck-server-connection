@@ -8,7 +8,7 @@ import {
 	CommandNames,
 	ErrorCode,
 	NotifyType,
-	ResponseInterface
+	ResponseInterface,
 } from './types.js'
 import { createServer, Server } from 'net'
 
@@ -25,25 +25,17 @@ export class HyperdeckServer {
 	onRecord?: (command: DeserializedCommands.RecordCommand) => Promise<void>
 	onStop?: (command: DeserializedCommand) => Promise<void>
 	onClipsCount?: (command: DeserializedCommand) => Promise<ResponseInterface.ClipsCount>
-	onClipsGet?: (
-		command: DeserializedCommands.ClipsGetCommand
-	) => Promise<ResponseInterface.ClipsGet>
+	onClipsGet?: (command: DeserializedCommands.ClipsGetCommand) => Promise<ResponseInterface.ClipsGet>
 	onClipsAdd?: (command: DeserializedCommands.ClipsAddCommand) => Promise<void>
 	onClipsClear?: (command: DeserializedCommand) => Promise<void>
 	onTransportInfo?: (command: DeserializedCommand) => Promise<ResponseInterface.TransportInfo>
-	onSlotInfo?: (
-		command: DeserializedCommands.SlotInfoCommand
-	) => Promise<ResponseInterface.SlotInfo>
+	onSlotInfo?: (command: DeserializedCommands.SlotInfoCommand) => Promise<ResponseInterface.SlotInfo>
 	onSlotSelect?: (command: DeserializedCommands.SlotSelectCommand) => Promise<void>
 	onGoTo?: (command: DeserializedCommands.GoToCommand) => Promise<void>
 	onJog?: (command: DeserializedCommands.JogCommand) => Promise<void>
 	onShuttle?: (command: DeserializedCommands.ShuttleCommand) => Promise<void>
-	onRemote?: (
-		command: DeserializedCommands.RemoteCommand
-	) => Promise<ResponseInterface.RemoteOptions>
-	onConfiguration?: (
-		command: DeserializedCommands.ConfigurationCommand
-	) => Promise<ResponseInterface.Configuration>
+	onRemote?: (command: DeserializedCommands.RemoteCommand) => Promise<ResponseInterface.RemoteOptions>
+	onConfiguration?: (command: DeserializedCommands.ConfigurationCommand) => Promise<ResponseInterface.Configuration>
 	onUptime?: (command: DeserializedCommand) => Promise<ResponseInterface.Uptime>
 	onFormat?: (command: DeserializedCommands.FormatCommand) => Promise<ResponseInterface.Format>
 	onIdentify?: (command: DeserializedCommands.IdentifyCommand) => Promise<void>
@@ -52,9 +44,7 @@ export class HyperdeckServer {
 	constructor(ip?: string, port = 9993, maxConnections = 1) {
 		this._server = createServer((socket) => {
 			const socketId = Math.random().toString(35).substr(-6)
-			this._sockets[socketId] = new HyperdeckSocket(socket, async (cmd) =>
-				this._receivedCommand(cmd)
-			)
+			this._sockets[socketId] = new HyperdeckSocket(socket, async (cmd) => this._receivedCommand(cmd))
 			this._sockets[socketId].on('disconnected', () => {
 				delete this._sockets[socketId]
 			})
@@ -87,97 +77,96 @@ export class HyperdeckServer {
 			if (err) return new TResponse(err.code, err.msg)
 			else return new TResponse(ErrorCode.InternalError, 'internal error')
 		}
-		let executor:
-			| ((command: DeserializedCommand) => Promise<typeof ResponseInterface | void>)
-			| undefined
+		let executor: ((command: DeserializedCommand) => Promise<typeof ResponseInterface | void>) | undefined
 		let resHandler: ((res: Hash<string> | void) => TResponse) | undefined
 
-		if (cmd.name === CommandNames.DeviceInfoCommand) {
+		const commandName: CommandNames = cmd.name as CommandNames
+
+		if (commandName === CommandNames.DeviceInfoCommand) {
 			executor = this.onDeviceInfo
 			resHandler = (res) => new TResponse(SynchronousCode.DeviceInfo, 'device info', res)
-		} else if (cmd.name === CommandNames.DiskListCommand) {
+		} else if (commandName === CommandNames.DiskListCommand) {
 			executor = this.onDiskList
 			resHandler = (res) => new TResponse(SynchronousCode.DiskList, 'disk list', res)
-		} else if (cmd.name === CommandNames.PreviewCommand) {
+		} else if (commandName === CommandNames.PreviewCommand) {
 			executor = this.onPreview
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.PlayCommand) {
+		} else if (commandName === CommandNames.PlayCommand) {
 			executor = this.onPlay
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.PlayrangeSetCommand) {
+		} else if (commandName === CommandNames.PlayrangeSetCommand) {
 			executor = this.onPlayrangeSet
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.PlayrangeClearCommand) {
+		} else if (commandName === CommandNames.PlayrangeClearCommand) {
 			executor = this.onPlayrangeClear
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.RecordCommand) {
+		} else if (commandName === CommandNames.RecordCommand) {
 			executor = this.onRecord
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.StopCommand) {
+		} else if (commandName === CommandNames.StopCommand) {
 			executor = this.onStop
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.ClipsCountCommand) {
+		} else if (commandName === CommandNames.ClipsCountCommand) {
 			executor = this.onClipsCount
 			resHandler = (res) => new TResponse(SynchronousCode.ClipsCount, 'clips count', res)
-		} else if (cmd.name === CommandNames.ClipsGetCommand) {
+		} else if (commandName === CommandNames.ClipsGetCommand) {
 			executor = this.onClipsGet
 			resHandler = (res) => new TResponse(SynchronousCode.ClipsInfo, 'clips info', res)
-		} else if (cmd.name === CommandNames.ClipsAddCommand) {
+		} else if (commandName === CommandNames.ClipsAddCommand) {
 			executor = this.onClipsAdd
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.ClipsClearCommand) {
+		} else if (commandName === CommandNames.ClipsClearCommand) {
 			executor = this.onClipsClear
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.TransportInfoCommand) {
+		} else if (commandName === CommandNames.TransportInfoCommand) {
 			executor = this.onTransportInfo
-			resHandler = (res) =>
-				new TResponse(SynchronousCode.TransportInfo, 'transport info', res)
-		} else if (cmd.name === CommandNames.SlotInfoCommand) {
+			resHandler = (res) => new TResponse(SynchronousCode.TransportInfo, 'transport info', res)
+		} else if (commandName === CommandNames.SlotInfoCommand) {
 			executor = this.onSlotInfo
 			resHandler = (res) => new TResponse(SynchronousCode.SlotInfo, 'slot info', res)
-		} else if (cmd.name === CommandNames.SlotSelectCommand) {
+		} else if (commandName === CommandNames.SlotSelectCommand) {
 			executor = this.onSlotSelect
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.NotifyCommand) {
+		} else if (commandName === CommandNames.NotifyCommand) {
 			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.GoToCommand) {
+		} else if (commandName === CommandNames.GoToCommand) {
 			executor = this.onGoTo
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.JogCommand) {
+		} else if (commandName === CommandNames.JogCommand) {
 			executor = this.onJog
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.ShuttleCommand) {
+		} else if (commandName === CommandNames.ShuttleCommand) {
 			executor = this.onShuttle
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.RemoteCommand) {
+		} else if (commandName === CommandNames.RemoteCommand) {
 			executor = this.onRemote
 			resHandler = (res?) => {
 				if (!res) return new TResponse(SynchronousCode.OK, 'ok')
 				else return new TResponse(SynchronousCode.Remote, 'remote', res)
 			}
-		} else if (cmd.name === CommandNames.ConfigurationCommand) {
+		} else if (commandName === CommandNames.ConfigurationCommand) {
 			executor = this.onConfiguration
 			resHandler = (res) => {
 				if (res) return new TResponse(SynchronousCode.Configuration, 'configuration', res)
 				else return new TResponse(SynchronousCode.OK, 'ok')
 			}
-		} else if (cmd.name === CommandNames.UptimeCommand) {
+		} else if (commandName === CommandNames.UptimeCommand) {
 			executor = this.onUptime
 			resHandler = (res) => new TResponse(SynchronousCode.Uptime, 'uptime', res)
-		} else if (cmd.name === CommandNames.FormatCommand) {
+		} else if (commandName === CommandNames.FormatCommand) {
 			executor = this.onFormat
 			resHandler = (res?) => {
 				if (res) return new TResponse(SynchronousCode.FormatReady, 'format ready', res)
 				else return new TResponse(SynchronousCode.OK, 'ok')
 			}
-		} else if (cmd.name === CommandNames.IdentifyCommand) {
+		} else if (commandName === CommandNames.IdentifyCommand) {
 			executor = this.onIdentify
 			resHandler = () => new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.WatchdogCommand) {
+		} else if (commandName === CommandNames.WatchdogCommand) {
 			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
-		} else if (cmd.name === CommandNames.PingCommand) {
+		} else if (commandName === CommandNames.PingCommand) {
 			// implemented in socket.ts
 			return new TResponse(SynchronousCode.OK, 'ok')
 		}
@@ -186,6 +175,6 @@ export class HyperdeckServer {
 			return executor(cmd).then(resHandler, intErrorCatch)
 		}
 
-		return Promise.reject()
+		return Promise.reject(new Error('Unknown command'))
 	}
 }

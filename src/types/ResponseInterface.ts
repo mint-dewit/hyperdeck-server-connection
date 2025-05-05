@@ -1,12 +1,5 @@
 import { Hash } from '../types.js'
-import {
-	TransportStatus,
-	VideoFormat,
-	SlotStatus,
-	AudioInputs,
-	VideoInputs,
-	FileFormats
-} from '../types.js'
+import { TransportStatus, VideoFormat, SlotStatus, AudioInputs, VideoInputs, FileFormats } from '../types.js'
 
 export interface DeviceInfo {
 	'protocol version': string

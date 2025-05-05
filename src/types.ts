@@ -72,7 +72,7 @@ export enum ErrorCode {
 	InvalidCodec = 151,
 	InvalidFormat = 160,
 	InvalidToken = 161,
-	FormatNotPrepared = 162
+	FormatNotPrepared = 162,
 }
 
 export enum SynchronousCode {
@@ -87,7 +87,7 @@ export enum SynchronousCode {
 	Configuration = 211,
 	ClipsCount = 214,
 	Uptime = 215,
-	FormatReady = 216
+	FormatReady = 216,
 }
 
 export enum AsynchronousCode {
@@ -95,14 +95,14 @@ export enum AsynchronousCode {
 	SlotInfo = 502,
 	TransportInfo = 508,
 	RemoteInfo = 510,
-	ConfigurationInfo = 511
+	ConfigurationInfo = 511,
 }
 
 export enum NotifyType {
 	Slot,
 	Transport,
 	Remote,
-	Configuration
+	Configuration,
 }
 
 export enum CommandNames {
@@ -131,7 +131,7 @@ export enum CommandNames {
 	FormatCommand = 'format',
 	IdentifyCommand = 'identify',
 	WatchdogCommand = 'watchdog',
-	PingCommand = 'ping'
+	PingCommand = 'ping',
 }
 
 export const ParameterMap = {
@@ -163,7 +163,7 @@ export const ParameterMap = {
 	uptime: [],
 	format: ['prepare', 'confirm'],
 	identify: ['enable'],
-	watchdog: ['period']
+	watchdog: ['period'],
 }
 
 export type Response =
@@ -182,7 +182,7 @@ export enum SlotStatus {
 	EMPTY = 'empty',
 	MOUNTING = 'mounting',
 	ERROR = 'error',
-	MOUNTED = 'mounted'
+	MOUNTED = 'mounted',
 }
 
 export enum VideoFormat {
@@ -208,7 +208,7 @@ export enum VideoFormat {
 	_4Kp30 = '4Kp30',
 	_4Kp50 = '4Kp50',
 	_4Kp5994 = '4Kp5994',
-	_4Kp60 = '4Kp60'
+	_4Kp60 = '4Kp60',
 }
 
 export enum TransportStatus {
@@ -219,7 +219,7 @@ export enum TransportStatus {
 	REWIND = 'rewind',
 	JOG = 'jog',
 	SHUTTLE = 'shuttle',
-	RECORD = 'record'
+	RECORD = 'record',
 }
 
 export enum FileFormats {
@@ -229,17 +229,17 @@ export enum FileFormats {
 	QuickTimeProResLT = 'QuickTimeProResLT',
 	QuickTimeProResProxy = 'QuickTimeProResProxy',
 	QuickTimeDNxHR220 = 'QuickTimeDNxHR220',
-	DNxHR220 = 'DNxHR220'
+	DNxHR220 = 'DNxHR220',
 }
 
 export enum AudioInputs {
 	embedded = 'embedded',
 	XLR = 'XLR',
-	RCA = 'RCA'
+	RCA = 'RCA',
 }
 
 export enum VideoInputs {
 	SDI = 'SDI',
 	HDMI = 'HDMI',
-	component = 'component'
+	component = 'component',
 }

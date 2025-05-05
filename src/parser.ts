@@ -88,7 +88,7 @@ export class MultilineParser {
 			return {
 				raw: lines.join('\r\n'),
 				name: msg,
-				parameters: params
+				parameters: params,
 			}
 		} else {
 			const headerMatch = lines[0].match(/(.+?)(:|)$/im)
@@ -114,7 +114,7 @@ export class MultilineParser {
 			const res: DeserializedCommand = {
 				raw: lines.join('\r\n'),
 				name: msg,
-				parameters: params
+				parameters: params,
 			}
 			return res
 		}

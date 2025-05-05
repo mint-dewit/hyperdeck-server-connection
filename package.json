@@ -23,7 +23,7 @@
 		"build:main": "tsc -p ./tsconfig.build.json",
 		"changelog": "npx sofie-version",
 		"release": "npm run lint && npm run changelog",
-		"validate:dependencies": "npm audit --groups dependencies && yarn license-validate",
+		"validate:dependencies": "npm audit --groups dependencies && npm run license-validate",
 		"validate:dev-dependencies": "npm audit --groups devDependencies",
 		"prepare": "husky",
 		"lint:raw": "eslint",
